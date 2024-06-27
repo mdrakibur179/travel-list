@@ -1,4 +1,11 @@
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import "./styles/index.css";
+
+const initialItems = [
+  { id: 1, description: "Passports", quantity: 2, packed: false },
+  { id: 2, description: "Socks", quantity: 12, packed: false },
+];
 
 function App() {
   return (
@@ -16,15 +23,64 @@ function Logo() {
 }
 
 function Form() {
+  const [quantity, setQuantity] = useState(1);
+  const [description, setDescription] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!description) return;
+
+    setQuantity(1);
+    setDescription("");
+
+    const item = { id: Date.now(), description, quantity, packed: false };
+    console.log(item);
+  }
+
   return (
-    <div className="add-form">
+    <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for 😍 your trip?</h3>
-    </div>
+      <select
+        value={quantity}
+        onChange={(e) => setQuantity(Number(e.target.value))}
+      >
+        {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+          <option key={num}>{num}</option>
+        ))}
+      </select>
+      <input
+        type="text"
+        placeholder="Item..."
+        onChange={(e) => setDescription(e.target.value)}
+        value={description}
+      />
+      <button>Add</button>
+    </form>
   );
 }
 
 function PackingList() {
-  return <div className="list">LIST</div>;
+  return (
+    <div className="list">
+      <ul>
+        {initialItems.map((i) => (
+          <Item key={i.id} itemObj={i} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Item({ itemObj }) {
+  return (
+    <li>
+      <span style={itemObj.packed ? { textDecoration: "line-through" } : {}}>
+        {itemObj.quantity} {itemObj.description}
+        <button>❌</button>
+      </span>
+    </li>
+  );
 }
 
 function Stats() {
