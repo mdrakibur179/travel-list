@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import "./styles/index.css";
 
 const initialItems = [
@@ -29,7 +30,24 @@ function Form() {
 }
 
 function PackingList() {
-  return <div className="list">LIST</div>;
+  return (
+    <div className="list">
+      <ul>
+        {initialItems.map((item) => (
+          <Items key={item.id} itemObj={item} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Items({itemObj}) {
+  return (
+    <li>
+      <span>{itemObj.quantity} {itemObj.description}</span>
+      <button>❌</button>
+    </li>
+  );
 }
 
 function Stats() {
