@@ -15,11 +15,15 @@ function App() {
     setItems((items) => [...items, item]);
   }
 
+  function handleDeleteItems(id) {
+    setItems((items) => items.filter((item) => item.id !== id));
+  }
+
   return (
     <div className="app">
       <Logo />
       <Form onAddItems={handleAddItems} />
-      <PackingList items={items} />
+      <PackingList items={items} onDelteItems={handleDeleteItems} />
       <Stats />
     </div>
   );
@@ -71,25 +75,25 @@ function Form({ onAddItems }) {
   );
 }
 
-function PackingList({ items }) {
+function PackingList({ items, onDelteItems }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item key={item.id} itemObj={item} />
+          <Item key={item.id} itemObj={item} onDelteItems={onDelteItems} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ itemObj }) {
+function Item({ itemObj, onDelteItems }) {
   return (
     <li>
       <span className={itemObj.packed ? "checked" : ""}>
         {itemObj.quantity} {itemObj.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => onDelteItems(itemObj.id)}>❌</button>
     </li>
   );
 }
